@@ -1,0 +1,157 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600);
+.x {
+    background: #DEDBDF;
+    border-radius: 10px;
+    height: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+}
+
+.x:hover {
+    background: #C2C0C2;
+}
+
+.line1 {
+    background: #898B8D;
+    height: 12px;
+    position: absolute;
+    transform: translateX(9px) translateY(4px) rotate(45deg);
+    width: 2px;
+}
+
+.line2 {
+    background: #898B8D;
+    height: 12px;
+    position: absolute;
+    transform: translateX(9px) translateY(4px) rotate(-45deg);
+    width: 2px;
+}
+
+.snip1336 {
+    font-family: 'Roboto', Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    min-width: 230px;
+    max-width: 400px;
+    height: 600px;
+    width: 100%;
+    color: #ffffff;
+    text-align: left;
+    //line-height: 1.4 em;
+    background-color: #353535;
+}
+
+.snip1336 img {
+    max-width: 100%;!important;
+    vertical-align: top;!important;
+    opacity: 0.85;!important;
+    border-radius: 0;!important;
+}
+
+.snip1336 figcaption {
+    width: 100%;
+    background-color: #353535;
+    padding: 25px;
+    position: relative;
+}
+
+.snip1336 figcaption:before {
+    position: absolute;
+    content: '';
+    bottom: 100%;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 55px 0 0 400px;
+    border-color: transparent transparent transparent #353535;
+}
+
+.snip1336 figcaption a {
+    padding: 5px;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    margin: 10px 0;
+    display: inline-block;
+    opacity: 0.65;
+    width: 47%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.snip1336 figcaption a:hover {
+    opacity: 1;
+}
+
+.snip1336 .profile {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 100%;
+    left: 25px;
+    z-index: 1;
+    max-width: 90px;
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.snip1336 .remove-friend {
+    margin-right: 4%;
+    border-color: #b13532;
+    color: #b13532;
+}
+
+.snip1336 h2, h3 {
+    margin: 0 0 5px;
+    font-weight: 300;
+}
+
+.snip1336 h2 span {
+    display: block;
+    font-size: 0.5em;
+    color: #2a8dd0;
+    margin-top: 10px;
+}
+
+.snip1336 h3 span {
+    display: block;
+    font-size: 15px;
+    color: #2a8dd0;
+    margin-top: 10px;
+}
+
+.snip1336 p {
+    margin: 10px 0 15px;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.buttons {
+    margin-bottom: auto;
+    float: bottom;
+}
+
+.snip1336 .description {
+    display: block;
+    width: 350px;
+    height: 125px;
+}
+
+.friend-popup{
+    max-width: 400px;
+    max-height: 600px;
+    padding: 0;!important;
+}
+
+.snip1336 .send-request{
+    margin-right: 4%;
+    border-color: #1796e8;
+    color: #1796e8;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+    <noscript>This function requires javascript to work properly</noscript>
+</head>
+<body>
+
+<div class="calendar light">
+    <div class="calendar_header">
+        <p class="header_copy"> Calendar Plan</p>
+    </div>
+    <div class="calendar_plan">
+        <div class="cl_plan">
+            <div class="cl_title">Today</div>
+            <div class="cl_copy" id="today">22nd April 2018</div>
+            <div class="cl_add">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="calendar_events">
+        {% if user.user.get_go_events_today %}
+            <p class="ce_title">Upcoming Events</p>
+            {% for event in user.user.get_go_events_today %}
+                <div class="event_item">
+                    <div class="ei_Dot dot_active"></div>
+                    <div class="ei_Title">{{ event.time }}</div>
+                    <div class="ei_Copy">{{ event.event_name }}</div>
+                    <div class="ei_Copy">at {{ event.location }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="ce_title">You have no scheduled events today</p>
+        {% endif %}
+    </div>
+</div>
+
+
+<!--Script-->
+<script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    document.getElementById('today').innerHTML = today
+
+</script>
+
+</body>
+</html>

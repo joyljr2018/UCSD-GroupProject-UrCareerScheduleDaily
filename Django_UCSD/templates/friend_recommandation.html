@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html>
+{% block content %}
+    <head>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{% static 'css/friend_rec_pop.css' %}">
+
+    </head>
+    <body>
+    <div class="container justify-content-center">
+        <div class="row">
+            {% for user in users %}
+                <span class="email card shadow" id="{{ user.id }}"
+                      onclick="$('#{{ user.id }}').addClass('expand')">
+               <div class="from">
+                  <div class="from-contents">
+                     <span class="avatar me"></span>
+                     <span class="name">{{ user.F_Name }} {{ user.L_Name }}</span>
+                  </div>
+                  <hr>
+                  <p class="common_friends">Common Friends: 100</p>
+               </div>
+               <div class="to">
+                  <figure class="snip1336">
+                     <img src="bkgd.png" alt="sample87"/>
+                     <div class="x" id="X{{ user.id }}">
+                        <div class="line1"></div>
+                        <div class="line2"></div>
+                     </div>
+                     <figcaption>
+                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/profile-sample4.jpg"
+                             alt="profile-sample4"
+                             class="profile"/>
+                        <h2>{{ user.F_Name }} {{ user.L_Name }}<span>{{ user.major.major }}&nbsp&nbsp&nbsp&nbsp{{ user.degree.degree }}</span></h2>
+                        <p class="description">{{ user.description }}</p>
+                        <div class="buttons">
+                           <a href="#" class="follow">Follow</a>
+                           <a href="#" class="info">More Info</a>
+                        </div>
+                     </figcaption>
+                  </figure>
+               </div>
+            </span>
+                <div class="col-1"></div>
+                <script>
+
+                    $('#X{{ user.id }}').on('click', function () {
+                        $('#{{ user.id }}').removeClass('expand');
+                        //event.stopPropagation();
+                    });
+
+                   $('#X{{ user.id }}').on('click',function (){
+                           $('#{{ user.id }}').removeClass('expand');
+                           event.stopPropagation();
+                    })
+                </script>
+            {% endfor %}
+            
+        <div class="col-3"></div>
+        </div>
+    </div>
+    </body>
+{% endblock %}
+</html>

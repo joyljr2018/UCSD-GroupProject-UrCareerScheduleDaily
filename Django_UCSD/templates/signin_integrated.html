@@ -1,0 +1,162 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/signin_integrated.css' %}">
+<script src="{% static 'js/sign_integrated1.js' %}"></script>
+
+<!-- Signin/Up modal-->
+<div class="modal fade d-example-modal-lg" id="signin-integrated" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-signin modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <!-- Form-->
+            <div class="form" id="login-form">
+                <div class="form-toggle"></div>
+                <div class="form-panel one">
+                    <div class="form-header">
+                        <h1>Account Login</h1>
+                    </div>
+                    <div class="form-content">
+                        <form>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="Your email"
+                                       required="required"/>
+                                <div id="email-err" style="color: indianred">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" placeholder="Password"
+                                       required="required"/>
+                                <div id="password-err" style="color: indianred">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-remember">
+                                </label><a class="form-recovery" href="{% url 'password_reset' %}">Forgot Password?</a>
+                            </div>
+                            <div class="form-group">
+                                <button id="login-btn" type="button">Log In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="form-panel two">
+                    <div class="form-header">
+                        <h1>Register Account</h1>
+                    </div>
+                    <div class="form-content">
+                        <form>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email-U" name="email-U" required="required" placeholder="Your email"/>
+                                <div id="emailU-err" style="color: #d7433f"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password-U" name="password-U" required="required" placeholder="Password"/>
+                                <div id="passwordU-err" style="color: #d7433f"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpassword">Confirm Password</label>
+                                <input type="password" id="password-UC" name="password-UC" required="required" placeholder="Confirm password"/>
+                                <div id="passwordUC-err" style="color: #d7433f"></div>
+                            </div>
+                            <div class="form-group">
+                                <button id="signup-btn" type="button">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Signin/Up Modal-->
+
+
+
+<!--TODO User Creation Modal -->
+
+<!--End User Creation Modal-->
+
+
+
+<script>
+    function reload(){
+        window.location.reload();
+    }
+
+    //Log in button click function
+    $("#login-btn").on('click', function () {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        $.ajax({
+            type: 'post',
+            url: "{% url 'userlogin' %}",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'email': email,
+                'password': password,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.successful) {
+
+                    if(data.new_user){
+                        window.location.replace('{% url 'new_user' %}');
+                    }
+
+                    //alert('success!');
+                    var usr_a = "<a class=\"nav-link usrname\"\n" +
+                        "               href=\"usr/profile/u=";
+                    var usr_b = "\">Hello, ";
+                    var usr_c = "</a>";
+                    var logout = "<a class=\"nav-link active\" id='logout' onclick=\"logout()\">Logout</a>";
+                    document.getElementById('usrname-top').innerHTML = usr_a + data.account_id + usr_b + data.name + usr_c;
+                    document.getElementById('signin-out').innerHTML = logout;
+                    $('#login-form').load('/templates/signin_successful.html');
+
+                } else {
+                    document.getElementById('email-err').innerHTML = data.dne_err;
+                    document.getElementById('password-err').innerHTML = data.password_err;
+                }
+            }
+        })
+    });
+
+    //Sign up button click function
+    $('#signup-btn').on('click', function () {
+        var email_U = document.getElementById('email-U').value;
+        var password_U = document.getElementById('password-U').value;
+        var password_UC = document.getElementById('password-UC').value;
+        $.ajax({
+            type: 'post',
+            url: "{% url 'usersignup' %}",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'email': email_U,
+                'password': password_U,
+                'confirmed_password': password_UC
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.successful) {
+                    alert('success!');
+                    $('#login-form').load('/templates/signup_successful.html');
+                    //TODO call popup user creation modal function
+                }
+                else{
+                    document.getElementById('emailU-err').innerHTML = data.email_err;
+                    document.getElementById('passwordU-err').innerHTML = data.password_err;
+                    document.getElementById('passwordUC-err').innerHTML = data.cpassword_err;
+                }
+            }
+        })
+    });
+
+    //TODO popup user creation modal function
+    function userCreationPopup() {
+        //TODO Ajax
+    }
+
+</script>

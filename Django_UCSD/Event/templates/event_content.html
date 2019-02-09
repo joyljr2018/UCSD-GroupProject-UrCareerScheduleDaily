@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% extends 'event.html' %}
+{% load staticfiles %}
+<html lang="en" dir="ltr">
+
+<!-- Events Display template -->
+{% block event %}
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                {% if events %}
+                    {% for event in events %}
+                        <!-- Events -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <!-- Event Description -->
+                                <div class="card shadow p-3 mb-5 bg-white">
+                                    <div class="card-header align-items-center">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h6>{{ event.location }} / {{ event.date }}</h6>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" class="btn btn-default float-right"
+                                                        id="icon{{ event.id }}">
+                                                    <i id="{{ event.id }}" class="fa fa-star-o" aria-hidden="false"></i>
+                                                </button>
+                                                <div id="about-popup">
+                                                    {% block content %}
+                                                    {% endblock %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <a data-toggle="modal"
+                                           data-target="#about{{ event.id }}" class="event_name">
+                                            <h4 class="card-title">{{ event.event_name }}</h4>
+                                        </a>
+                                        <p class="card-text">{{ event.description|truncatewords:"55" }}</p>
+                                        <div id="go-button{{ event.id }}">
+                                            <!--button goes here-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+
+                            //go button
+                            const go_button{{ event.id }} = " <button class='btn btn-dark btn-sm float-right' id=\"go{{ event.id }}\" onclick='go_{{ event.id }}()'>Go</button>";
+                            const not_go_button{{ event.id }} = " <button class=\"btn btn-danger btn-sm float-right\" id=\"go{{ event.id }}\" onclick='go_{{ event.id }}()'>Not Going</button>";
+
+                            function toggleIcon(e) {
+                                $(e.target)
+                                    .prev('.panel-heading')
+                                    .find(".more-less")
+                                    .toggleClass('glyphicon-plus glyphicon-minus');
+                            }
+
+                            $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+                            $('.panel-group').on('shown.bs.collapse', toggleIcon);
+
+                            //go to button click function
+                            function go_{{ event.id }}() {
+                                //alert("lll");
+                                //toggleButton();
+                                $.ajax({
+                                    url: "{% url 'go_to_event'%}",
+                                    data: {
+                                        'event_id':{{event.id }},
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        if (data.successful) {
+                                            //alert("success!");
+                                            if (data.go_status) {
+                                                document.getElementById('go-button{{ event.id }}').innerHTML = not_go_button{{ event.id }};
+                                                document.getElementById('go-button{{ event.id }}-a').innerHTML = not_go_button{{ event.id }};
+                                                if (data.favorite_status) {
+                                                    $('#{{ event.id }}').removeClass("fa-star-o").addClass("fa-star");
+                                                    $('#{{ event.id }}-a').removeClass("fa-star-o").addClass("fa-star");
+                                                }
+                                                else {
+                                                    $('#{{ event.id }}').removeClass("fa-star").addClass("fa-star-o");
+                                                    $('#{{ event.id }}-a').removeClass("fa-star-o").addClass("fa-star");
+                                                }
+                                            }
+                                            else {
+                                                document.getElementById('go-button{{ event.id }}').innerHTML = go_button{{ event.id }};
+                                                document.getElementById('go-button{{ event.id }}-a').innerHTML = go_button{{ event.id }};
+                                            }
+                                        }
+                                        else {
+                                            alert("failed");
+                                        }
+                                    }
+                                });
+                                //alert("hallo");
+                            }
+
+                            // Toggle start icon to like and dislike
+                            $(document).ready(function () {
+                                {% if user.is_authenticated %}
+                                    //Retrieve ajax data from server on initialization
+                                    $.ajax({
+                                        url: "{% url 'event_get_favorite_status' %}",
+                                        data: {
+                                            'event_id':{{ event.id }},
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            if (data.event_status) {
+                                                //$('#go{{ event.id }}').innerHTML = "Not Going";
+                                                if (data.event_status) {
+                                                    $('#{{ event.id }}').removeClass("fa-star-o").addClass("fa-star");
+                                                    //$('#{{ event.id }}-a').removeClass("fa-star-o").addClass("fa-star");
+                                                }
+                                                else {
+                                                    $('#{{ event.id }}').removeClass("fa-star").addClass("fa-star-o");
+                                                    //$('#{{ event.id }}-a').removeClass("fa-star-o").addClass("fa-star");
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    $.ajax({
+                                        url: "{% url 'event_get_go_status' %}",
+                                        data: {
+                                            'event_id':{{ event.id }},
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            if (data.event_status) {
+                                                document.getElementById('go-button{{ event.id }}').innerHTML = not_go_button{{ event.id }};
+                                                document.getElementById('go-button{{ event.id }}-a').innerHTML = not_go_button{{ event.id }};
+                                            }
+                                            else {
+                                                document.getElementById('go-button{{ event.id }}').innerHTML = go_button{{ event.id }};
+                                                document.getElementById('go-button{{ event.id }}-a').innerHTML = go_button{{ event.id }};
+                                            }
+
+                                        }
+
+                                    });
+                                {% endif %}
+                                //favorite icon click function
+                                $('#icon{{ event.id }}').on('click', function () {
+                                    //alert("lll");
+                                    $(this).find('#{{ event.id }}').toggleClass("fa-star fa-star-o");
+                                    //$(this).find('#{{ event.id }}-a').toggleClass("fa-star fa-star-o");
+                                    $.ajax({
+                                        url: "{% url 'event_add_to_favorite'%}",
+                                        data: {
+                                            'event_id':{{event.id }},
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            if (data.successful) {
+                                                alert("success!");
+                                            }
+                                            else {
+                                                alert("failed");
+                                            }
+                                        }
+                                    });
+                                    //alert("hallo");
+                                });
+
+                            })
+                        </script>
+
+
+                    {% endfor %}
+                {% else %}
+                    <h2>No Events Found</h2>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</html>

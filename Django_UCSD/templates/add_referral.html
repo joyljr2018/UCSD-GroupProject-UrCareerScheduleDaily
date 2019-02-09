@@ -1,0 +1,220 @@
+{% load static %}
+<script src="{% static 'js/add_referral.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/add_referral.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'
+      rel='stylesheet' type='text/css'>
+<div class="modal fade bd-example-modal-lg" id="add-referral" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body referral">
+                <div class="row justify-content-center">
+                    <h1>Offer Your Referral</h1>
+                </div>
+                <!-- show steps-->
+                <ul class="steps">
+                    <li class="is-active"><h5>Step 1</h5></li>
+                    <li><h5>Step 2</h5></li>
+                    <li><h5>Step 3</h5></li>
+                </ul>
+                <!-- container -->
+                <div class="container_ref">
+                    <form class="form-wrapper" name="form" id="add_ref_form">
+                        <div class="section is-active">
+                            <div class="row">
+                                <input type="text" name="position" id="position" placeholder="title of your job">
+                                <label for="position">Title</label>
+                            </div>
+                            <div class="row">
+                                <p id="err-P" style="color: indianred;"></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <input type="text" name="location" id="search-L"
+                                               onkeyup="changeInputL(this.value)"
+                                               placeholder="Loaction of your job">
+                                        <label for="search-L">Location</label>
+                                        <div id="result-L" class="list-group"></div>
+                                    </div>
+                                    <div class="row">
+                                        <p id="err-L" style="color: indianred;"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <input type="text" name="company" id="search-C"
+                                               onkeyup="changeInputC(this.value)"
+                                               placeholder="Your company">
+                                        <label for="search-C">Company</label>
+                                        <div id="result-C" class="list-group"></div>
+                                    </div>
+                                    <div class="row">
+                                        <p id="err-C" style="color: indianred;"></p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <input type="text" name="major" id="search-M" onkeyup="changeInputM(this.value)"
+                                               placeholder="Major requirement">
+                                        <label for="search-M">Major</label>
+                                        <div id="result-M" class="list-group"></div>
+                                    </div>
+                                    <div class="row">
+                                        <p id="err-M" style="color: indianred;"></p>
+                                    </div>
+
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <input type="text" name="degree" id="search-D"
+                                               onkeyup="changeInputD(this.value)"
+                                               placeholder="Degree requirement">
+                                        <label for="search-D">Degree</label>
+                                        <div id="result-D" class="list-group"></div>
+                                    </div>
+                                    <div class="row">
+                                        <p id="err-D" style="color: indianred;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-right">
+                                <button class="next-button" tabindex="0" style="margin-left: auto;">Next
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="row justify-content-center">
+                                <h4>Pick Some Categories</h4>
+                                <ul class="ks-cboxtags">
+                                    <li class="li_box"><input type="checkbox" name="S" id="S"
+                                                              value="" onclick = "this.value = 'S'; valC = true"><label
+                                            for="S">Software</label></li>
+                                    <li class="li_box"><input type="checkbox" name="E" id="E"
+                                                              value="" onclick = "this.value = 'E'; valC = true"><label
+                                            for="E">Engineering</label></li>
+                                    <li class="li_box"><input type="checkbox" name="H" id="H"
+                                                              value="" onclick = "this.value = 'H'; valC = true"><label
+                                            for="H">Hardware</label></li>
+                                    <li class="li_box"><input type="checkbox" name="EM" id="EM"
+                                                              value="" onclick = "this.value = 'EM'; valC = true"><label
+                                            for="EM">Embedded</label></li>
+                                    <li class="li_box"><input type="checkbox" name="A" id="A"
+                                                              value="" onclick = "this.value = 'A'; valC = true"><label
+                                            for="A">Aerospace</label></li>
+                                    <li class="li_box"><input type="checkbox" name="AR" id="AR"
+                                                              value="" onclick = "this.value = 'AR'; valC = true"><label
+                                            for="AR">Art
+                                        Sparkle</label></li>
+                                    <li class="li_box"><input type="checkbox" name="B" id="B"
+                                                              value="" onclick = "this.value = 'B'; valC = true"><label
+                                            for="B">Business</label></li>
+                                    <li class="li_box"><input type="checkbox" name="M" id="M"
+                                                              value="" onclick = "this.value = 'M'; valC = true"><label
+                                            for="M">Math</label></li>
+                                    <li class="li_box"><input type="checkbox" name="AC" id="AC"
+                                                              value="" onclick = "this.value = 'AC'; valC = true"><label
+                                            for="AC">Accounting</label></li>
+                                    <li class="li_box"><input type="checkbox" name="PHY" id="PHY"
+                                                              value="" onclick = "this.value = 'PHY'; valC = true"><label
+                                            for="PHY">Physics</label>
+                                    </li>
+                                    <li class="li_box"><input type="checkbox" name="COMM" id="COMM"
+                                                              value="" onclick = "this.value = 'COMM'; valC = true"><label
+                                            for="COMM">Communication</label></li>
+                                    <li class="li_box"><input type="checkbox" name="C" id="C"
+                                                              value="" onclick = "this.value = 'C'; valC = true"><label
+                                            for="C">Computer</label></li>
+                                    <li class="li_box"><input type="checkbox" name="SC" id="SC"
+                                                              value="" onclick = "this.value = 'SC'; valC = true"><label
+                                            for="SC">Science</label></li>
+                                    <li class="li_box"><input type="checkbox" name="BIO" id="BIO"
+                                                              value="" onclick = "this.value = 'BIO'; valC = true"><label
+                                            for="BIO">Biology</label></li>
+                                    <li class="li_box"><input type="checkbox" name="BE" id="BE"
+                                                              value="" onclick = "this.value = 'BE'; valC = true"><label
+                                            for="BE">BioEngineering</label></li>
+                                    <li class="li_box"><input type="checkbox" name="MUS" id="MUS"
+                                                              value="" onclick = "this.value = 'MUS'; valC = true"><label
+                                            for="MUS">Music</label></li>
+                                    <li class="li_box"><input type="checkbox" name="CHEM" id="CHEM"
+                                                              value="" onclick = "this.value = 'CHEM'; valC = true"><label
+                                            for="CHEM">Chemistry</label></li>
+                                    <li class="li_box"><input type="checkbox" name="ELE" id="ELE"
+                                                              value="" onclick = "this.value = 'ELE'; valC = true"><label
+                                            for="ELE">Electrical</label></li>
+                                    <li class="li_box"><input type="checkbox" name="BC" id="BC"
+                                                              value="" onclick = "this.value = 'BC'; valC = true"><label
+                                            for="BC">BioChemistry</label></li>
+                                    <li class="li_box"><input type="checkbox" name="L" id="L" value="" onclick = "this.value = 'L'; valC = true"><label
+                                            for="L">Laborer</label></li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <p id="err-Ca" style="color: indianred;"></p>
+                            </div>
+                            <div class="row justify-content-center">
+                                <textarea name="description" id="_description"
+                                          placeholder="Tell us more about you"></textarea>
+                                <label for="_description">Job Description</label>
+                            </div>
+                            <div class="row">
+                                <p id="err-Des" style="color: indianred;"></p>
+                            </div>
+                            <div class="row justify-content-right">
+                                <button type="button" class="next-button" tabindex="0" style="margin-left: auto;">Next
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="row justify-content-center referral_check">
+                                <h6 class="referral">Do you require a resume?</h6>
+                                <input type="checkbox" name="resume_required" id="resume_required" value="False">
+                                <label for="resume_required">Checkbox</label>
+                            </div>
+                            <div class="row justify-content-center">
+                                <textarea name="referral_description" id="referral_description"
+                                          placeholder="Tell us more about you"></textarea>
+                                <label for="referral_description">Additional Information</label>
+                            </div>
+                            <div class="row">
+                                <p id="err-RD" style="color: indianred;"></p>
+                            </div>
+                            <div class="row justify-content-right">
+                                <button class="next-button" type="submit" tabindex="0" style="margin-left: auto;">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="row justify-content-center">
+                                <h3>
+                                    Congratulations
+                                </h3>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h4>
+                                    You have successfully offered a job position!
+                                </h4>
+                            </div>
+                            <div class="row blank"><br></div>
+                            <div class="row justify-content-center">
+                                <button class="next-button" tabindex="0" onclick = "this.form.reset();">Offer Another Referral</button>
+                            </div>
+                            <div class="row justify-content-center">
+                                <button class="exit-button" tabindex="0" data-dismiss="modal">No Thanks</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>

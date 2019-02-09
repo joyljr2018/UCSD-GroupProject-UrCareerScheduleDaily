@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+{% extends 'profile.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+{% block right_lower %}
+    <div class="col">
+        <div class="tab-content event-tab" id="myTabContent">
+            <div class="tab-pane active show fade" id="personal" role="tabpanel" aria-labelledby="personal-data-tab">
+                <!-- personal profile content -->
+                <div class="container profile-tab personal-data-tab ">
+
+                    <div class="card bg-white shadow"
+                         style="padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; margin-bottom: 20px;">
+                        <div class="row">
+                        </div>
+                        <form name="form">
+                            <fieldset disabled>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>First Name</label>
+                                    </div>
+                                    <div class="col-md-6" id="F_Name">
+                                        <p>{{ user.user.F_Name }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Last Name</label>
+                                    </div>
+                                    <div class="col-md-6" id="lname">
+                                        <p>{{ user.user.L_Name }}</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Contact Email</label>
+                                </div>
+                                <div class="col-md-6" id="contact_email">
+                                    <p>{{ user.user.contact_email }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" id="contact_email_error" style="color: indianred"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Major</label>
+                                </div>
+                                <div class="col-md-6" id="major">
+                                    <p>{{ user.user.major.major }}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Degree</label>
+                                </div>
+                                <div class="col-md-6" id="degree">
+                                    <p>{{ user.user.degree.degree }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Graduation Year</label>
+                                </div>
+                                <div class="col-md-6" id="yr_graduation">
+                                    <p>{{ user.user.yr_graduation }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" id="yr_graduation_error" style="color: indianred"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Company</label>
+                                </div>
+                                <div class="col-md-6" id="company">
+                                    <p>{{ user.user.company.company_name }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Description</label>
+                                </div>
+                                <div class="col-md-6" id="description">
+                                    <p>{{ user.user.description }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" id="description_error" style="color: indianred"></div>
+                            </div>
+                        </form>
+                        <div class="row" style="margin-top: 15px">
+                            <div class="col-4">
+                                <a href="{% url 'changepassword' %}" class="btn btn-dark btn-sm float-right"
+                                   style="position: absolute; left: 15%">Change Password</a>
+                            </div>
+                            <div class="col-5"></div>
+                            <div class="col-1" id="cancel-button">
+                                <div id="save-changes"></div>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-1" id="editprofile">
+                                <button class="btn btn-dark btn-sm float-right" style="margin-left: 50px"
+                                        onclick="Render()">Edit
+                                    Profile
+                                </button>
+                            </div>
+                            <div class="col-1" id="cancel"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SCRIPT -->
+                <script>
+
+                    //edit profile filed and buttons
+                    const buttonSubmit = " <button type = 'submit' class='btn btn-dark btn-sm float-right' onclick='test()'>Save Changes</button>";
+                    const buttonCancel = " <button class='btn btn-dark btn-sm float-right' onclick='Cancel()'>Cancel</button>";
+                    const toRenderFName = "<input class=\"form-control\" type='text' name='F_Name' id='F_Name' value = '{{ user.user.F_Name }}'>";
+                    const toRenderLName = "<input class=\"form-control\"type='text' name='lname' id='lname' value = '{{ user.user.L_Name }}'>";
+                    const toRenderEmail = "<input class=\"form-control\"type='text' name='contact_email' id='contact_email' value = '{{ user.user.contact_email }}'>";
+                    const toRenderGyear = "<input class=\"form-control\"type='text' name='yr_graduation' id='yr_graduation' value = '{{ user.user.yr_graduation }}'>";
+                    const toRenderMajor = "<select class=\"form-control\" id=\"major\" name=\"major\">\n" +
+                        "                                {% for major in view.get_majors %}\n"+
+                            "                                <option>{{ major.major }}</option>\n"+
+                            "                                {% endfor %}\n" +
+                        "                            </select>";
+
+
+                    const toRenderDegree = "<select class=\"form-control\" id=\"degree\" name=\"degree\">\n" +
+                        "    {% for degree in view.get_degrees %}\n"+
+                            "        <option>{{ degree.degree }}</option>\n" +
+                            " {% endfor %}\n" +
+                        "      </select>";
+                    const toRenderDes = "<textarea class=\"form-control\"rows='6' name='description' id='description'>{{ user.user.description }}</textarea>";
+                    const toRenderCompany = "<input class='form-control' type=\"text\" name=\"company\" id=\"search-Com\"\n" +
+                        "                                               onkeyup=\"changeInputCom(this.value)\"\n" +
+                        "                                               placeholder=\"Your Company\">\n" +
+                        "                                        <div id=\"result-Com\" class=\"list-group\" style='flex-direction:column;!important'></div>";
+
+                    function Render() {
+                        //Change button appearance
+                        document.getElementById('editprofile').remove();
+                        document.getElementById('save-changes').innerHTML = buttonSubmit;
+                        document.getElementById('cancel').innerHTML = buttonCancel;
+                        //Change content to form
+                        document.getElementById('major').innerHTML = toRenderMajor;
+                        document.getElementById('F_Name').innerHTML = toRenderFName;
+                        document.getElementById('lname').innerHTML = toRenderLName;
+                        document.getElementById('yr_graduation').innerHTML = toRenderGyear;
+                        document.getElementById('contact_email').innerHTML = toRenderEmail;
+                        document.getElementById('description').innerHTML = toRenderDes;
+                        document.getElementById('degree').innerHTML = toRenderDegree;
+                        document.getElementById('company').innerHTML = toRenderCompany;
+                    }
+
+                    function Cancel() {
+                        window.location.reload()
+                    }
+
+                    function test() {
+                        var major = document.forms["form"]["major"].value;
+                        var degree = document.forms["form"]["degree"].value;
+                        var yr_graduation = document.forms["form"]["yr_graduation"].value;
+                        var description = document.forms["form"]["description"].value;
+                        var contact_email = document.forms["form"]["contact_email"].value;
+                        var company = document.forms["form"]["company"].value;
+
+                        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+                        var email_error = false, description_error = false, yr_error = false;
+
+                        if (description.length < 50) {
+                            document.getElementById('description_error').innerText = "Description should be at least 50 characters";
+                            description_error = true;
+                        } else if (description.length > 1500) {
+                            document.getElementById('description_error').innerText = "Description should be at most 140 characters";
+                            description_error = true;
+                        }
+                        if (!pattern.test(contact_email)) {
+                            document.getElementById('contact_email_error').innerText = "You have entered an invalid email address!";
+                            email_error = true;
+                        }
+                        if (yr_graduation < 1970 || yr_graduation > 2050) {
+                            document.getElementById('yr_graduation_error').textContent = "Graduate year Should be between 1970 and 2050";
+                            yr_error = true;
+                        }
+
+                        if (email_error || description_error || yr_error) {
+                            return;
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: '{% url 'edit_profile' %}',
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                'contact_email': contact_email,
+                                'major': major,
+                                'degree': degree,
+                                'yr_graduation': yr_graduation,
+                                'description': description,
+                                'company': company,
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.successful) {
+                                    alert("success!");
+                                    window.location.reload();
+                                } else {
+                                    alert("failed!");
+                                    window.location.reload(true);
+                                }
+                            }
+                        });
+                    }
+
+
+                    function changeInputCom(val) {
+                        var autoCompleteResult = matchList(val, companies);
+                        document.getElementById("result-Com").innerHTML = "";
+                        for (var i = 0, limit = 10, len = autoCompleteResult.length; i < len && i < limit; i++) {
+                            document.getElementById("result-Com").innerHTML += "<a class='list-group-item list-group-item-action' href='#' onclick='setSearchCom(\"" + autoCompleteResult[i] + "\")'>" + autoCompleteResult[i] + "</a>";
+                        }
+                    }
+
+                    function setSearchCom(value) {
+                        document.getElementById('search-Com').value = value;
+                        document.getElementById("result-Com").innerHTML = "";
+                    }
+                </script>
+            </div>
+            <!--End of personal info-->
+
+            <!--Favorite Event section-->
+            <div class="tab-pane fade" id="event" role="tabpanel" aria-labelledby="event-tab">
+                <!-- Added Fav Events in Profile Page -->
+                <div class="container profile-tab event-tab job_tab referral_tab">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <!-- Events -->
+                        {% if not events %}
+                            <div class="panel panel-default">
+                                <h6>You have not added any favorite event yet.</h6>
+                            </div>
+                        {% else %}
+                            {% for event in events %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <!-- Event Description -->
+                                        <div class="row justify-content-center">
+                                            <div class="col-12">
+                                                <div class="card shadow p-3 mb-4 bg-white"
+                                                     id="event_card{{ event.id }}">
+                                                    <div class="card-header align-items-center">
+                                                        <div class="row">
+                                                            <h6>Location: {{ event.location }} /
+                                                                Date: {{ event.date }}</h6>
+                                                            <div class="x" id="{{ event.id }}">
+                                                                <div class="line1"></div>
+                                                                <div class="line2"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <a data-toggle="modal"
+                                                           data-target="#about{{ event.id }}" class="event_name">
+                                                            <h4 class="card-title">{{ event.event_name }}</h4>
+                                                        </a>
+                                                        <p class="card-text">{{ event.company.company_name | upper }}<br>{{ event.description|truncatewords:"25" }}
+                                                        </p>
+                                                        <div class="row justify-content-right">
+                                                            <div class="col-11"></div>
+                                                            <div class="col-1" id="go-button{{ event.id }}">
+                                                                <!--button goes here-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <link rel="stylesheet" href="{% static 'css/event_aboute.css' %}">
+                                    <div class="modal fade bd-example-modal-lg" id="about{{ event.id }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true"
+                                         style="width:auto;!important;height: 100%;!important;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content"
+                                                 style="width:auto;!important;height: 100%;!important; overflow: scroll;">
+
+                                                <header style="height: 50vh;">
+                                                    <div class="header-content" style="height: 50vh;">
+                                                        <h3 class='header-title animate-pop-in'>{{ event.event_name }}</h3>
+                                                        <h4 class='header-subtitle animate-pop-in'>
+                                                            Date: {{ event.date }}@{{ event.time }}</h4>
+                                                        <h4 class='header-info animate-pop-in'>
+                                                            Location: {{ event.location }} </h4>
+                                                        <p></p>
+                                                    </div>
+                                                </header>
+
+                                                <div class="lower">
+                                                    <div class="row" style="height: 60px;">
+                                                        <pre class="event-large">Held By {{ event.company.company_name|upper }}</pre>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="event-md">Description:</p>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <p>{{ event.description }}</p>
+                                                    </div>
+
+                                                    <br>
+                                                </div>
+                                                <div class="footer" style="position:absolute; right:5%; top:90%">
+                                                    <div id="go-button{{ event.id }}-a">
+                                                        <!--button goes here-->
+                                                    </div>
+                                                </div>
+                                                <hr>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    //go button
+                                    const go_button{{ event.id }} = " <button class=\"btn btn-dark btn-sm float-right\" id=\"go{{ event.id }}\" onclick='go_{{ event.id }}()'>Go</button>";
+                                    const not_go_button{{ event.id }} = " <button class=\"btn btn-dark btn-sm float-right\" id=\"go{{ event.id }}\" onclick='go_{{ event.id }}()'>Not Going</button>";
+
+                                    //go to button click function
+                                    function go_{{ event.id }}() {
+                                        //alert("lll");
+                                        //toggleButton();
+                                        $.ajax({
+                                            url: "{% url 'go_to_event'%}",
+                                            data: {
+                                                'event_id':{{event.id }},
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                if (data.successful) {
+                                                    //alert("success!");
+                                                    if (data.go_status) {
+                                                        document.getElementById('go-button{{ event.id }}').innerHTML = not_go_button{{ event.id }};
+                                                        document.getElementById('go-button{{ event.id }}-a').innerHTML = not_go_button{{ event.id }};
+                                                    } else {
+                                                        document.getElementById('go-button{{ event.id }}').innerHTML = go_button{{ event.id }};
+                                                        document.getElementById('go-button{{ event.id }}-a').innerHTML = go_button{{ event.id }};
+                                                    }
+                                                } else {
+                                                    alert("failed");
+                                                }
+                                            }
+                                        });
+                                        //alert("hallo");
+                                    }
+
+                                    $('#{{ event.id }}').on('click', function () {
+                                        $.ajax({
+                                            url: "{% url 'event_add_to_favorite'%}",
+                                            data: {
+                                                'event_id':{{event.id }},
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                if (data.successful) {
+                                                    alert("remove success!");
+                                                } else {
+                                                    alert("failed");
+                                                }
+                                            }
+                                        });
+                                        $('#event_card{{ event.id }}').remove();
+                                    });
+
+                                    $(document).ready(function () {
+                                        $.ajax({
+                                            url: "{% url 'event_get_go_status' %}",
+                                            data: {
+                                                'event_id':{{ event.id }},
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                if (data.event_status) {
+                                                    document.getElementById('go-button{{ event.id }}').innerHTML = not_go_button{{ event.id }};
+                                                    document.getElementById('go-button{{ event.id }}-a').innerHTML = not_go_button{{ event.id }};
+                                                } else {
+                                                    document.getElementById('go-button{{ event.id }}').innerHTML = go_button{{ event.id }};
+                                                    document.getElementById('go-button{{ event.id }}-a').innerHTML = go_button{{ event.id }};
+                                                }
+
+                                            }
+
+                                        });
+                                    })
+
+                                </script>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <!--End of favorite event-->
+
+            <!--Favorite Job section-->
+            <div class="tab-pane fade" id="job" role="tabpanel" aria-labelledby="job-tab">
+                <!-- Added Fav Events in Profile Page -->
+                <div class="container profile-tab event-tab job_tab referral_tab">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <!-- Events -->
+                        {% if not view.get_favjobs %}
+                            <div class="panel panel-default">
+                                <h6>You have not added any favorite job yet.</h6>
+                            </div>
+                        {% else %}
+                            {% for job in view.get_favjobs %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <div class='row'>
+                                            <div class="col-12">
+                                                <!-- Event Description -->
+                                                <div class="card shadow p-3 mb-4 bg-white" id="job_card{{ job.id }}">
+                                                    <div class="card-header align-items-center">
+                                                        <div class="row">
+                                                            <h6>Post Date: {{ job.post_time }}</h6>
+                                                            <div class="x" id="{{ job.id }}">
+                                                                <div class="line1"></div>
+                                                                <div class="line2"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+
+                                                        <a data-toggle="modal"
+                                                           data-target="#about{{ job.id }}" class="job_name">
+                                                            <h4 class="card-title">{{ job.job_position }}</h4>
+                                                        </a>
+
+                                                        <p class="card-text">{{ job.company.company_name | upper }}<br>{{ job.description|truncatewords:"25" }}
+                                                        </p>
+                                                        <a href="{{ job.job_URL }}"
+                                                           class="btn btn-dark btn-sm float-right">Apply</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <link rel="stylesheet" href="{% static 'css/event_aboute.css' %}">
+                                    <style>
+                                        .modal{
+                                            overflow-y: scroll;!important;
+                                        }
+                                    </style>
+                                    <div class="modal fade bd-example-modal-lg" id="about{{ job.id }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true"
+                                         style="width:auto;!important;height: 100%;!important;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content"
+                                                 style="width:auto;!important;height: 100%;!important;">
+                                                <header style="height:40vh">
+                                                    <div class="header-content">
+                                                        <h3 class='header-title animate-pop-in'>{{ job.job_position }}</h3>
+                                                        <h4 class='header-subtitle animate-pop-in'> Post
+                                                            Date: {{ job.post_time }}</h4>
+                                                        <p></p>
+                                                    </div>
+                                                </header>
+
+                                                <div class="lower">
+                                                    <div class="row" style="height: 60px;">
+                                                        <pre class="event-large">Company: {{ job.company.company_name|upper }}</pre>
+                                                    </div>
+                                                    <div class="row">
+                                                        <p class="event-md">Description:</p>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <p>{{ job.description }}</p>
+                                                    </div>
+
+                                                    <br>
+                                                </div>
+                                                <div class="footer" style="position:absolute; right:5%; top:90%">
+                                                    <div>
+                                                        <!--button goes here-->
+                                                        <a href="{{ job.job_URL }}">
+                                                            <button class="btn btn-sm float-right job-apply btn-dark">
+                                                                Apply
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <script>
+                                    $('#{{ job.id }}').on('click', function () {
+                                        $.ajax({
+                                            url: "{% url 'job_add_to_favorite'%}",
+                                            data: {
+                                                'job_id':{{job.id }},
+                                            },
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                if (data.successful) {
+                                                    alert("remove success!");
+                                                } else {
+                                                    alert("failed");
+                                                }
+                                                $('#job_card{{ job.id }}').remove();
+                                            }
+                                        });
+                                    });
+
+                                </script>
+
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <!--End of favorite job-->
+
+
+            <!--My referrals section-->
+            <div class="tab-pane fade" id="referral" role="tabpanel" aria-labelledby="referral-tab">
+                <!-- Added Fav Events in Profile Page -->
+                <div class="float-button" data-toggle="modal" data-target="#add-referral" id="add_referral_btn">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                </div>
+                <div class="container profile-tab event-tab job_tab referral_tab">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!-- Events -->
+                        {% if not view.get_referrals %}
+                            <div class="panel panel-default" id="referral_list" style="margin-top: 60px;">
+                                <h6>Have job to offer? Everyone's expecting you!</h6>
+                            </div>
+                        {% else %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <div class='row'>
+                                        <div class="col-12" id='referral_list' style="top:60px">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!--End of my referralt-->
+            <!--Add referral popup-->
+            <div id="add_referral"></div>
+
+
+        </div>
+    </div>
+{% endblock %}
+
+</body>
+</html>

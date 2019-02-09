@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    </meta>
+    <title></title>
+</head>
+
+<body>
+
+
+<!-- upper right content and upper right nv bar -->
+<div class="profile-head">
+    <div class="card bg-white shadow" style="margin-bottom: 20px;">
+        <div class="profile-upper-content" style="padding: 20px;">
+        <div class="row">
+            {# Profile upper left info #}
+            <div class="col col-7">
+                <h5>
+                    {{ user.user.F_Name }} {{ user.user.L_Name }}
+                </h5>
+                <p class="proile-rating">Number of Friends : {{ user.user.friend.count }}</p>
+            </div>
+            {# Profile Image #}
+            <div class="col col-5">
+                <div class="profile-img" id="profilePic">
+                    <!--<img style="max-width: 100%; max-height: 100%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>-->
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="personal-data-tab" data-toggle="tab" href="#personal" role="tab"
+               aria-controls="personal" aria-selected="true">About</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="event-tab" data-toggle="tab" href="#event" role="tab" aria-controls="event"
+               aria-selected="false">Favorite Events</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="job-tab" data-toggle="tab" href="#job" role="tab" aria-controls="job"
+               aria-selected="false">Favorite Jobs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="referral-tab" data-toggle="tab" href="#referral" role="tab" aria-controls="referral"
+               aria-selected="false">My Referrals</a>
+        </li>
+    </ul>
+</div>
+
+
+</body>
+<script>
+    //Get pic data
+    var a = '<img width=100 height=100 src="data:image/png;base64,';
+    var b = '">';
+    var c = a + "{{ user.user.picdata }}" + b;
+    document.getElementById('profilePic').innerHTML = c;
+
+</script>
+
+</html>
